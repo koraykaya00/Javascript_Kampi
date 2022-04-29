@@ -1,4 +1,4 @@
-export default class UserAddModel { //bir kullanici ekleyecegimiz zaman sadece ona özel bir nesne oluşturacağiz.
+export default class UserAddModel { // kullanıcı ekleneceğinde tamamen ona özel  bir nesne.
                                     
-                                    //CustomerAddModel' da yapilabilir, bir customer ekleme operasyonunda olmasi gereken alanlar...
+                                    // customer için ayrı employee için ayrı model de geçilebilir.
 }

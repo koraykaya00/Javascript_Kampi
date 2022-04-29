@@ -1,46 +1,52 @@
-import { BaseLogger } from "../crossCuttingConcerns/logging/logger.js"
-import Customer from "../models/customer.js"
-import User from "../models/user.js"
-import UserService from "../services/userService.js"
-//userService.js içerisinde export ederken "default" olmasaydi,
-//bunun içerisinde süslü parantez olarak kullanirdik.
-//{import UserService} gibi.
+import { BaseLogger, ElasticLogger, MongoLogger } from "../crossCuttingConcerns/logging/logger.js";
+import { users } from "../data/users.js";
+import Customer from "../models/customer.js";
+import User from "../models/user.js";
+import UserService from "../services/userService.js";  // servisler klasöründeki userService'yi kullanıcam.
 
-console.log("User component is here")
+console.log("User component loaded...");
 
-let logger1 = new BaseLogger() //ElasticLogger, MongoLogger
-let userService = new UserService(logger1) //new'leyerek class'ı kullanabiliriz.
+// let logger1 = new BaseLogger();
+// let logger1 = new ElasticLogger();
+let logger1 = new MongoLogger();
 
-
-let user1 = new User(1, "Ataberk", "Çetinkaya", "Bursa")
-let user2 = new User(2, "Yeliz", "Polat", "Bursa")
-
-userService.add(user1)
-userService.add(user2)
-//userları ekledigimiz yer olarak düsünülebilir.
-
-//console.log(userService.list()) //user'ları veren metot
-// userları listeledimiz sayfa olarak düşünülebilir
-//console.log(userService.getById(1))
-// userların detayini aldıgımız sayfa olarak düsünülebilir.
+let userService = new UserService(logger1); 
 
 
-//prototyping - sonradan değer eklendi
-let customer = {id: 1, firstName: "Berk"}
-customer.lastName = "linux"
+let user1 = new User(1,"Koray","Kaya","Çanakkale");
+let user2 = new User(2,"Şeyda","Sağlam","Kastamonu");
+let user3 = new User(3, "Ayşe","Çetinkaya","Antalya");
 
-console.log(customer.lastName)
+userService.add(user1); // userService içindeki add fonksiyonuna user1'i geç.
+userService.add(user2);
+userService.add(user3);
 
-console.log("----------------------------------")
-userService.load()
+// console.log(userService.list());
+// console.log(userService.getById(2));    // 2 numaralı müşteriyi getir.
 
-let customerToAdd = (new Customer(1, "Ataberk", "Çetinkaya", "Bursa", "asdds" )) //wrong user type olabilir çünkü usertype yanlış olabilir,
-customerToAdd.type = "customer"                                                 //olmasa bile, validation'dan da geçmesi gerekecek
+userService.add();   // parametre istemez.
 
-userService.add(customerToAdd)                                                     
-                                                                        
-console.log(userService.customers)
-console.log(userService.employees)
-console.log(userService.errors) //error olanlar buraya
-console.log(userService.getCustomersSorted())
+userService.getById(1);
 
+userService.list();
+
+
+let customer = {id:1, firstName: "Engin"};
+
+customer.lastName = "Demiroğ";  // sonradan değer ekleyebiliriz.
+
+
+console.log("-----------------");
+
+userService.load();
+
+let customerToAdd = new Customer (1, "Nuri", "Polat", "İzmir","fdsfw");    // new customer olarak göndermemiz hatalı.
+customerToAdd.type = "customer";    //customer type'ne başka bir alan ekleyerek hareket ettirebiliriz.
+
+
+
+console.log(userService.customers);
+userService.add();
+console.log(userService.employees);
+console.log(userService.errors);
+console.log(userService.getCustomersSorted());
